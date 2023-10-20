@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Scroll Controlled Video</title>
+    <style>
+      body,
+      html {
+        margin: 0;
+        padding: 0;
+        height: 200%; /* This gives space to scroll */
+        overflow-x: hidden;
+      }
+      .display-video {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        min-width: 100%;
+        min-height: 100%;
+        width: auto;
+        height: auto;
+        z-index: -100;
+        transform: translate(-50%, -50%);
+        object-fit: cover;
+        pointer-events: none;
+      }
+    </style>
+  </head>
+  <body>
+    <video id="videoElement" preload="metadata" class="display-video">
+      <source src="video.mp4" type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+    <script>
+      const video = document.getElementById("videoElement");
+
+      // Ensure video metadata is loaded to get video duration
+      video.addEventListener("loadedmetadata", function () {
+        const videoDuration = video.duration;
+        // Listen for scroll event
+        window.addEventListener("scroll", function () {
+          // Calculate the percentage of page scrolled
+          const scrollPosition = window.scrollY;
+          const maxScroll =
+            document.documentElement.scrollHeight - window.innerHeight;
+          const scrollPercentage = scrollPosition / maxScroll;
+          // Set video currentTime based on scroll position
+          video.currentTime = videoDuration * scrollPercentage;
+        });
+      });
+    </script>
+  </body>
+</html>
